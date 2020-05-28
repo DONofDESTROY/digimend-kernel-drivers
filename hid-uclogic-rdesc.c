@@ -975,6 +975,98 @@ const __u8 uclogic_rdesc_xppen_deco01_frame_arr[] = {
 const size_t uclogic_rdesc_xppen_deco01_frame_size =
 			sizeof(uclogic_rdesc_xppen_deco01_frame_arr);
 
+/* fixed report descriptor of Parblo A640 interface 0 (stylus) */			
+__u8 uclogic_rdesc_parblo_a640_fixed0_arr[] = {
+	0x05, 0x0D,         /*  Usage Page (Digitizer),                 		*/
+	0x09, 0x02,         /*  Usage (Pen),                            		*/
+	0xA1, 0x01,         /*  Collection (Application),               		*/
+	0x85, 0x07,         /*      Report ID (7),                      		*/
+	0x09, 0x20,         /*      Usage (Stylus),                     		*/
+	0xA0,               /*      Collection (Physical),              		*/
+	0x14,               /*          Logical Minimum (0),            		*/
+	0x25, 0x01,         /*          Logical Maximum (1),            		*/
+	0x75, 0x01,         /*          Report Size (1),                		*/
+	0x09, 0x42,         /*          Usage (Tip Switch),             		*/
+	0x09, 0x44,         /*          Usage (Barrel Switch),          		*/
+	0x09, 0x46,         /*          Usage (Tablet Pick),            		*/
+	0x95, 0x03,         /*          Report Count (3),               		*/
+	0x81, 0x02,         /*          Input (Variable),               		*/
+	0x95, 0x03,         /*          Report Count (3),               		*/
+	0x81, 0x03,         /*          Input (Constant, Variable),     		*/
+	0x09, 0x32,         /*          Usage (In Range),               		*/
+	0x95, 0x01,         /*          Report Count (1),               		*/
+	0x81, 0x02,         /*          Input (Variable),               		*/
+	0x95, 0x01,         /*          Report Count (1),               		*/
+	0x81, 0x03,         /*          Input (Constant, Variable),     		*/
+	0x05, 0x01,         /*          Usage Page (Desktop),                   */
+	0x09, 0x30,         /*          Usage (X),                              */
+	0x75, 0x10,         /*          Report Size (16),                       */
+	0x95, 0x01,         /*          Report Count (1),                       */
+	0xA4,               /*          Push,                                   */
+	0x55, 0x0D,         /*          Unit Exponent (13),                     */
+	0x65, 0x13,         /*          Unit (Inch),                            */
+	0x34,               /*          Physical Minimum (0),                   */
+	0x46, 0xC6, 0x16,   /*          Physical Maximum (5830),                */
+	0x26, 0xB0, 0x73,   /*          Logical Maximum (29616),                */
+	0x81, 0x42,         /*          Input (Variable, Null State),           */
+	0x09, 0x31,         /*          Usage (Y),                              */
+	0x46, 0x34, 0x0D,   /*          Physical Maximum (3380),                */
+	0x26, 0x12, 0x43,   /*          Logical Maximum (17170),                */
+	0x81, 0x42,         /*          Input (Variable, Null State),           */
+	0xB4,               /*          Pop,                                    */
+	0x05, 0x0D,         /*          Usage Page (Digitizer),                 */
+    0x09, 0x30,         /*          Usage (Tip Pressure),                   */
+    0x26, 0xFF, 0x1F,   /*          Logical Maximum (8191),                 */
+    0x46, 0xFF, 0x1F,   /*          Physical Maximum (8191),                */
+    0x54,               /*          Unit Exponent (0),                      */
+    0x66, 0x11, 0xE1,   /*          Unit (Centimeter * Gram * Seconds^-2),  */
+    0x75, 0x10,         /*          Report Size (16),                       */
+    0x81, 0x02,         /*          Input (Variable),                       */
+    0x09, 0x3D,         /*          Usage (X Tilt),                         */
+    0x15, 0x81,         /*          Logical Minimum (-127),                 */
+   	0x25, 0x7F,         /*          Logical Maximum (127),                  */
+    0x75, 0x08,         /*          Report Size (8),                        */
+    0x95, 0x01,         /*          Report Count (1),                       */
+    0x81, 0x02,         /*          Input (Variable),                       */
+    0x09, 0x3E,         /*          Usage (Y Tilt),                         */
+    0x15, 0x81,         /*          Logical Minimum (-127),                 */
+    0x25, 0x7F,         /*          Logical Maximum (127),                  */
+    0x81, 0x02,         /*          Input (Variable),                       */
+    0xC0,               /*      End Collection,                             */
+    0xC0                /*  End Collection                                  */
+};
+
+const size_t uclogic_rdesc_parblo_a640_fixed0_size =
+			sizeof(uclogic_rdesc_parblo_a640_fixed0_arr);
+
+__u8 uclogic_rdesc_parblo_a640_frame_arr[] = {
+	0x05, 0x01,             /*  Usage Page (Desktop),                   */
+	0x09, 0x07,             /*  Usage (Keypad),                         */
+	0xA1, 0x01,             /*  Collection (Application),               */
+	0x85, 0x06,             /*      Report ID (6),                      */
+	0x05, 0x0D,             /*      Usage Page (Digitizer),             */
+	0x09, 0x39,             /*      Usage (Tablet Function Keys),       */
+	0xA0,                   /*      Collection (Physical),              */
+	0x05, 0x09,             /*          Usage Page (Button),            */
+	0x75, 0x08,             /*          Report Size (8),                */
+	0x95, 0x03,             /*          Report Count (3),               */
+	0x81, 0x02,             /*          Input (Variable),               */
+	0x19, 0x01,             /*          Usage Minimum (01h),            */
+	0x29, 0x04,             /*          Usage Maximum (04h),            */
+	0x14,               	/*          Logical Minimum (0),            */
+	0x25, 0x01,         	/*          Logical Maximum (1),            */
+	0x75, 0x08,             /*          Report Size (8),                */
+	0x95, 0x06,             /*          Report Count (6),               */
+	0x81, 0x02,             /*          Input (Variable),               */
+	0xC0,                   /*      End Collection,                     */
+	0xC0                    /*  End Collection                          */
+};
+
+		
+const size_t uclogic_rdesc_parblo_a640_frame_size =
+			sizeof(uclogic_rdesc_parblo_a640_frame_arr);
+
+
 /**
  * uclogic_rdesc_template_apply() - apply report descriptor parameters to a
  * report descriptor template, creating a report descriptor. Copies the

@@ -590,11 +590,17 @@ static int uclogic_params_frame_init_v1(struct uclogic_params_frame *frame,
 			str_buf);
 	} else {
 		hid_dbg(hdev, "generic buttons enabled\n");
-		rc = uclogic_params_frame_init_with_desc(
-				frame,
-				uclogic_rdesc_v1_frame_arr,
-				uclogic_rdesc_v1_frame_size,
-				UCLOGIC_RDESC_V1_FRAME_ID);
+		
+		/*just need to initilize the tablet from this 
+		interface as after probing the interface changes*/
+		
+		rc = 0;
+
+		// rc = uclogic_params_frame_init_with_desc(
+		// 		frame,
+		// 		uclogic_rdesc_v1_frame_arr,
+		// 		uclogic_rdesc_v1_frame_size,
+		// 		UCLOGIC_RDESC_V1_FRAME_ID);
 		if (rc != 0)
 			goto cleanup;
 		found = true;
@@ -775,6 +781,87 @@ static int uclogic_params_init_with_opt_desc(struct uclogic_params *params,
 	rc = 0;
 cleanup:
 	kfree(desc_copy_ptr);
+	return rc;
+}
+
+/**
+ * uclogic_params_pen_parblo_init() - initialize tablet interface pen
+ * input and retrieve its parameters from the device, using v1 protocol.
+ *
+ * @pen:	Pointer to the pen parameters to initialize (to be
+ *		cleaned up with uclogic_params_pen_cleanup()). Not modified in
+ *		case of error, or if parameters are not found. Cannot be NULL.
+ * @pfound:	Location for a flag which is set to true if the parameters
+ *		were found, and to false if not (e.g. device was
+ *		incompatible). Not modified in case of error. Cannot be NULL.
+ * @hdev:	The HID device of the tablet interface to initialize and get
+ *		parameters from. Cannot be NULL.
+ *
+ * Returns:
+ *	Zero, if successful. A negative errno code on error.
+ */
+static int uclogic_params_pen_parblo_init(struct uclogic_params_pen *pen,
+				      bool *pfound,
+				      struct hid_device *hdev)
+{
+	int rc;
+	bool found = false;
+	/* Buffer for (part of) the string descriptor */
+	__u8 *buf = NULL;
+	/* Minimum descriptor length required, maximum seen so far is 18 */
+	const int len = 12;
+	__u8 *desc_copy_ptr = NULL;
+
+	/* Check arguments */
+	if (pen == NULL || pfound == NULL || hdev == NULL) {
+		rc = -EINVAL;
+		goto cleanup;
+	}
+
+	/*
+	 * Read string descriptor containing pen input parameters.
+	 * The specific string descriptor and data were discovered by sniffing
+	 * the Windows driver traffic.
+	 * NOTE: This enables fully-functional tablet mode.
+	 */
+	rc = uclogic_params_get_str_desc(&buf, hdev, 100, len);
+	if (rc == -EPIPE) {
+		hid_dbg(hdev,
+			"string descriptor with pen parameters not found, assuming not compatible\n");
+		goto finish;
+	} else if (rc < 0) {
+		hid_err(hdev, "failed retrieving pen parameters: %d\n", rc);
+		goto cleanup;
+	} else if (rc != len) {
+		hid_dbg(hdev,
+			"string descriptor with pen parameters has invalid length (got %d, expected %d), assuming not compatible\n",
+			rc, len);
+		goto finish;
+	}
+
+	kfree(buf);
+	buf = NULL;
+
+	desc_copy_ptr = kmemdup(uclogic_rdesc_parblo_a640_fixed0_arr, uclogic_rdesc_parblo_a640_fixed0_size, GFP_KERNEL);
+	if (desc_copy_ptr == NULL) {
+		rc = -ENOMEM;
+		goto cleanup;
+	}
+
+	/*
+	 * Fill-in the parameters
+	 */
+	memset(pen, 0, sizeof(*pen));
+	pen->desc_ptr = desc_copy_ptr;
+	desc_copy_ptr = NULL;
+	pen->desc_size = uclogic_rdesc_parblo_a640_fixed0_size;
+	found = true;
+finish:
+	*pfound = found;
+	rc = 0;
+cleanup:
+	kfree(desc_copy_ptr);
+	kfree(buf);
 	return rc;
 }
 
@@ -1181,6 +1268,38 @@ int uclogic_params_init(struct uclogic_params *params,
 		rc = uclogic_params_huion_init(&p, hdev);
 		if (rc != 0)
 			goto cleanup;
+		break;
+case VID_PID(USB_VENDOR_ID_UCLOGIC,
+		     USB_DEVICE_ID_UCLOGIC_PARBLO_A640):
+		/*disabling useless interface */	
+		if (bInterfaceNumber == 1) {
+			uclogic_params_init_invalid(&p);
+			break;
+		}
+		/*keyboard/keypad interface*/
+		if (bInterfaceNumber == 2){
+			/*just probe in this interface, don't set anything in this*/
+			rc = uclogic_params_frame_init_v1(&p.frame_list[0],
+										  &found, hdev);
+		}
+		/*pen interface and pad(after probing)*/
+		if (bInterfaceNumber == 0){
+			rc = uclogic_params_pen_parblo_init(&p.pen, &found, hdev);
+				if (rc != 0) {
+					hid_err(hdev, "pen probing failed: %d\n", rc);
+					goto cleanup;
+				}
+				if (!found) {
+					hid_warn(hdev, "pen parameters not found");
+				}
+				if (found) {
+					rc = uclogic_params_frame_init_with_desc(
+						&p.frame_list[0],
+						uclogic_rdesc_parblo_a640_frame_arr,
+						uclogic_rdesc_parblo_a640_frame_size,
+					UCLOGIC_RDESC_PARBLO_A640_FRAME_ID);
+				}
+			}
 		break;
 	case VID_PID(USB_VENDOR_ID_UGTIZER,
 		     USB_DEVICE_ID_UGTIZER_TABLET_GP0610):

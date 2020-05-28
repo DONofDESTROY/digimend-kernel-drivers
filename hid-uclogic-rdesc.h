@@ -176,4 +176,21 @@ extern const size_t uclogic_rdesc_ugee_g5_frame_size;
 /* Least-significant bit of Ugee G5 frame rotary encoder state */
 #define UCLOGIC_RDESC_UGEE_G5_FRAME_RE_LSB 38
 
+/* Size of the original descriptors of Parblo A640 tablet (Pen)*/
+#define UCLOGIC_RDESC_PARBLO_A640_ORIG0_SIZE 192
+
+/* Size of the original descriptors of Parblo A640 tablet (Pad)*/
+#define UCLOGIC_RDESC_PARBLO_A640_ORIG0_FRAME_SIZE 92
+
+/*Report ID of Parblo A640 frame control reports*/
+#define UCLOGIC_RDESC_PARBLO_A640_FRAME_ID 0x06
+
+/* Fixed report descriptor for Parblo A640 tablet (Pen) */
+extern __u8 uclogic_rdesc_parblo_a640_fixed0_arr[];
+extern const size_t uclogic_rdesc_parblo_a640_fixed0_size;
+
+/* Fixed report descriptor for Parblo A640 tablet (Pad)*/
+extern __u8 uclogic_rdesc_parblo_a640_frame_arr[];
+extern const size_t uclogic_rdesc_parblo_a640_frame_size;
+
 #endif /* _HID_UCLOGIC_RDESC_H */
