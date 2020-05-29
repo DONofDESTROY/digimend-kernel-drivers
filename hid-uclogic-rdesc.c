@@ -1039,6 +1039,8 @@ __u8 uclogic_rdesc_parblo_a640_fixed0_arr[] = {
 const size_t uclogic_rdesc_parblo_a640_fixed0_size =
 			sizeof(uclogic_rdesc_parblo_a640_fixed0_arr);
 
+/*fixed report descriptor of interface 2 initialized to interface 1
+											parblo A640(not completed fully)*/
 __u8 uclogic_rdesc_parblo_a640_frame_arr[] = {
 	0x05, 0x01,             /*  Usage Page (Desktop),                   */
 	0x09, 0x07,             /*  Usage (Keypad),                         */
